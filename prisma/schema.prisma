@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -19,6 +13,7 @@ model Store {
   userId    String
   billboards Billboard[] @relation("StoreToBillboard")
   categories Category[] @relation("StoreToCategory")
+  sizes Size[] @relation("StoreToSize")
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -48,5 +43,16 @@ model Category {
 
   @@index([storeId])
   @@index([billboardId])
+}
 
+model Size {
+  id String @id @default(uuid())
+  storeId String
+  store Store @relation("StoreToSize", fields: [storeId], references: [id])
+  name String
+  value String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([storeId])
 }
